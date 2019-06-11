@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
+import PeopleContext from '../context/PeopleContext';
 
-const Form = props => {
+const Form = () => {
     const [person, setPerson] = useState({ firstName:"", lastName: ""});
+    const context = useContext(PeopleContext)
+
     const onChange = (event) => {
         setPerson({...person, [event.target.name]: event.target.value});
       }
@@ -14,9 +17,14 @@ const Form = props => {
           firstName: person.firstName.trim(),
           lastName: person.lastName.trim(),
         }
-        props.addPerson(newPerson);
+        context.addPerson(newPerson);
         setPerson({ firstName: "", lastName: "" });
       }
+      const printNumberOfPeople = () => console.log(`Number of people ${context.people.length}`);
+
+      //Never call except intial here if context.people instead of empty array call.
+      useMemo(() => printNumberOfPeople(), [])
+
       return(
         <div className="col">
         <h2>Add person:</h2>
